@@ -212,6 +212,9 @@
         // Firebase variables
         let app, db, auth, userId;
 
+        // **IMPORTANT:** Insert your Gemini API key here to make the app work on a public website.
+        const GEMINI_API_KEY = "AIzaSyAdHQIDYSdCx7oPhXK7aWBOqjAMV2BGTA4"; // PASTE YOUR KEY HERE
+
         // Function to create and append a message bubble
         function addMessage(message) {
             const messageElement = document.createElement('div');
@@ -289,11 +292,16 @@
 
         // Function to handle the API call with retry logic
         async function getGeminiResponse(prompt) {
+            // Check if the API key is present
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_API_KEY_HERE") {
+                saveMessage('I am unable to connect to the AI service. Please make sure your API key is correctly inserted in the code.', 'bot');
+                return;
+            }
+
             typingIndicator.style.display = 'flex';
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
-            const apiKey = ""; // Leave as-is
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
@@ -375,13 +383,18 @@
 
         // Function to speak text using the Gemini TTS API
         async function speakText(text) {
+            // Check if the API key is present
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_API_KEY_HERE") {
+                saveMessage('I am unable to connect to the AI voice service. Please make sure your API key is correctly inserted in the code.', 'bot');
+                return;
+            }
+            
             const loadingMessage = document.createElement('div');
             loadingMessage.textContent = 'Speaking...';
             loadingMessage.classList.add('bot-message');
             chatHistory.appendChild(loadingMessage);
 
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${GEMINI_API_KEY}`;
             
             const payload = {
                 contents: [{ parts: [{ text: text }] }],
