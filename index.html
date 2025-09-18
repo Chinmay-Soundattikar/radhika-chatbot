@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #1a202c; /* Dark background */
+            background-color: #f3f4f6;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,59 +21,22 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 800px;
-            height: 90vh;
-            background-color: #2d3748; /* Darker main container */
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            max-width: 768px;
+            height: 80vh;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             overflow: hidden;
-            position: relative;
         }
 
         .chat-header {
-            padding: 1.5rem;
-            background-color: #1a202c; /* Header background */
+            padding: 1rem;
+            background-color: #4a5568;
             color: #ffffff;
             text-align: center;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
             font-weight: bold;
-            font-size: 1.5rem;
-        }
-        
-        .chat-header h1 {
-            margin: 0;
-        }
-
-        .action-buttons {
-            padding: 1rem;
-            background-color: #2d3748;
-            border-bottom: 1px solid #4a5568;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .action-buttons button {
-            padding: 0.6rem 1rem;
-            background-color: #4a5568;
-            color: #cbd5e0;
-            font-weight: 500;
-            border-radius: 9999px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .action-buttons button:hover {
-            background-color: #4a5568;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .action-buttons button:active {
-            transform: translateY(0);
-            box-shadow: none;
         }
 
         .chat-history {
@@ -82,84 +45,63 @@
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
+            gap: 1rem;
             scroll-behavior: smooth;
-        }
-        
-        /* Custom scrollbar for WebKit browsers */
-        .chat-history::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-history::-webkit-scrollbar-thumb {
-            background-color: #4a5568;
-            border-radius: 4px;
-        }
-
-        .chat-history::-webkit-scrollbar-track {
-            background-color: transparent;
         }
 
         .message-bubble {
-            max-width: 85%;
-            padding: 1rem 1.25rem;
-            border-radius: 1.5rem;
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
             word-wrap: break-word;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .user-message {
-            background-color: #5a67d8; /* Brighter, distinct color for user */
+            background-color: #2b6cb0;
             color: #ffffff;
             align-self: flex-end;
-            border-bottom-right-radius: 0.5rem;
-            background-image: linear-gradient(135deg, #5a67d8 0%, #7b86d8 100%);
+            border-bottom-right-radius: 0.25rem;
         }
 
         .bot-message {
-            background-color: #4a5568;
-            color: #e2e8f0;
+            background-color: #e2e8f0;
+            color: #1a202c;
             align-self: flex-start;
-            border-bottom-left-radius: 0.5rem;
-            background-image: linear-gradient(135deg, #4a5568 0%, #636b7b 100%);
+            border-bottom-left-radius: 0.25rem;
         }
         
         .chat-input-area {
             display: flex;
-            padding: 1.5rem;
-            border-top: 1px solid #4a5568;
-            background-color: #2d3748;
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+            background-color: #f7fafc;
         }
         
         #user-input {
             flex-grow: 1;
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1rem;
             border-radius: 9999px;
-            border: 1px solid #4a5568;
-            background-color: #2d3748;
-            color: #ffffff;
+            border: 1px solid #cbd5e0;
             outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.3s;
         }
         
         #user-input:focus {
-            border-color: #5a67d8;
-            box-shadow: 0 0 8px rgba(90, 103, 216, 0.5);
+            border-color: #4a5568;
         }
         
         #send-button {
             margin-left: 0.75rem;
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 9999px;
-            background-color: #5a67d8;
+            background-color: #4a5568;
             color: #ffffff;
             font-weight: bold;
             transition: background-color 0.3s, transform 0.1s;
         }
         
         #send-button:hover {
-            background-color: #6a74da;
+            background-color: #2d3748;
         }
 
         #send-button:active {
@@ -169,26 +111,24 @@
         .typing-indicator {
             display: none;
             align-self: flex-start;
-            padding: 1rem 1.25rem;
-            border-radius: 1.5rem;
-            background-color: #4a5568;
-            color: #e2e8f0;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            background-color: #e2e8f0;
+            color: #4a5568;
             font-style: italic;
-            border-bottom-left-radius: 0.5rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-bottom-left-radius: 0.25rem;
         }
 
         .image-container {
-            margin-top: 1rem;
-            border-radius: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0.75rem;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .image-container img {
             max-width: 100%;
             height: auto;
-            display: block;
+            border-radius: 0.5rem;
         }
 
         .speak-button {
@@ -199,12 +139,12 @@
             margin-left: 0.5rem;
             font-size: 1.25rem;
             line-height: 1;
-            color: #cbd5e0;
+            color: #4a5568;
             vertical-align: middle;
             transition: color 0.2s ease-in-out;
         }
         .speak-button:hover {
-            color: #ffffff;
+            color: #2d3748;
         }
         
         /* Loading dots animation */
@@ -234,21 +174,13 @@
 
 <div class="chat-container">
     <div class="chat-header">
-        <h1>Radhika</h1>
+        Radhika
     </div>
-    <div class="action-buttons">
-        <button id="summarize-button" class="group">
-            <span class="group-hover:text-purple-300 transition-colors duration-200">✨ Summarize Chat</span>
-        </button>
-        <button id="continue-button" class="group">
-            <span class="group-hover:text-purple-300 transition-colors duration-200">✨ Continue Writing</span>
-        </button>
-        <button id="tone-button" class="group">
-            <span class="group-hover:text-purple-300 transition-colors duration-200">✨ Change Tone (Formal)</span>
-        </button>
-        <button id="generate-image-button" class="group">
-            <span class="group-hover:text-purple-300 transition-colors duration-200">✨ Generate Image</span>
-        </button>
+    <div class="flex flex-wrap justify-center p-2 gap-2 bg-gray-100 rounded-b-lg">
+        <button id="summarize-button" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-full text-sm transition-colors duration-200">✨ Summarize Chat</button>
+        <button id="continue-button" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-full text-sm transition-colors duration-200">✨ Continue Writing</button>
+        <button id="tone-button" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-full text-sm transition-colors duration-200">✨ Change Tone (Formal)</button>
+        <button id="generate-image-button" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-full text-sm transition-colors duration-200">✨ Generate Image</button>
     </div>
     <div id="chat-history" class="chat-history">
         <!-- Chat messages will be dynamically added here -->
@@ -279,9 +211,6 @@
 
         // Firebase variables
         let app, db, auth, userId;
-        
-        // This is a special message to help the user understand the API key issue.
-        addMessage({ sender: 'bot', text: 'Thank you for providing the API key. The issue you are seeing with a `401` error is a problem with the API key being provided by the environment, not a bug in the application itself. The code is already correctly configured to handle it. You do not need to add the key to the code directly.'});
 
         // Function to create and append a message bubble
         function addMessage(message) {
@@ -293,25 +222,15 @@
             } else {
                 messageElement.classList.add('bot-message');
             }
-            
-            const markdownContent = marked.parse(message.text);
-            messageElement.innerHTML = markdownContent;
 
-            // Handle images correctly within Markdown
-            const imgElement = messageElement.querySelector('img');
-            if (imgElement) {
-                const imgContainer = document.createElement('div');
-                imgContainer.classList.add('image-container');
-                imgContainer.appendChild(imgElement);
-                messageElement.innerHTML = '';
-                messageElement.appendChild(imgContainer);
-            }
+            // Render markdown text
+            messageElement.innerHTML = marked.parse(message.text);
             
             // Add speak button for bot messages
-            if (message.sender !== userId && !imgElement) {
+            if (message.sender !== userId) {
                 const speakButton = document.createElement('button');
                 speakButton.classList.add('speak-button');
-                speakButton.innerHTML = '🔊';
+                speakButton.innerHTML = '&#128266;'; // Unicode for 🔊
                 speakButton.onclick = () => speakText(message.text);
                 messageElement.appendChild(speakButton);
             }
@@ -375,8 +294,6 @@
 
             const apiKey = ""; // Leave as-is
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            
-            console.log("Attempting API call with URL:", apiUrl);
             
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
@@ -632,9 +549,7 @@
 
             const apiKey = ""; // Leave as-is
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
-            
-            console.log("Attempting Image API call with URL:", apiUrl);
-            
+
             const payload = {
                 instances: {
                     prompt: userText + ", high quality, detailed, professional art"
