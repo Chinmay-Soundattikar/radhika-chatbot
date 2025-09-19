@@ -232,11 +232,12 @@
         const sendButton = document.getElementById('send-button');
         const typingIndicator = document.getElementById('typing-indicator');
 
-        // Firebase variables
+        // Global variables for Firebase and audio
         let app, db, auth, userId;
+        let currentAudio = null;
 
         // **IMPORTANT:** Insert your Gemini API key here to make the app work on a public website.
-        const GEMINI_API_KEY = "AIzaSyAiRHTLuvHK6gsSdQQCHT4HkkmeeF942UY"; // PASTE YOUR KEY HERE
+        const GEMINI_API_KEY = "AIzaSyAiRHTLuvHK6gsSdQQCHT4HkkmeeF942UY";
 
         // Function to create and append a message bubble
         function addMessage(message) {
@@ -256,8 +257,8 @@
             if (message.sender !== userId) {
                 const speakButton = document.createElement('button');
                 speakButton.classList.add('speak-button');
-                speakButton.innerHTML = '&#128266;'; // Unicode for 🔊
-                speakButton.onclick = () => speakText(message.text);
+                speakButton.innerHTML = '🔊';
+                speakButton.onclick = () => toggleAudio(message.text);
                 messageElement.appendChild(speakButton);
             }
             
@@ -378,6 +379,12 @@
         async function saveMessage(text, sender) {
             if (!db || !userId) {
                 console.error("Firestore not initialized or user not authenticated.");
+                // Fallback to local display if Firestore connection fails
+                const tempMessage = {
+                    text: text,
+                    sender: sender === 'user' ? userId : 'bot'
+                };
+                addMessage(tempMessage);
                 return;
             }
 
@@ -395,28 +402,22 @@
             }
         }
 
-        // Function to add a message with an image
-        async function addImageMessage(url, altText) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message-bubble', 'bot-message');
-            
-            // Save image message to Firestore
-            await saveMessage(`![${altText}](${url})`, 'bot');
-        }
+        // Function to toggle audio playback
+        async function toggleAudio(text) {
+            // If audio is currently playing, stop it
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+                return;
+            }
 
-        // Function to speak text using the Gemini TTS API
-        async function speakText(text) {
             // Check if the API key is present
             if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_API_KEY_HERE") {
                 saveMessage('I am unable to connect to the AI voice service. Please make sure your API key is correctly inserted in the code.', 'bot');
                 return;
             }
             
-            const loadingMessage = document.createElement('div');
-            loadingMessage.textContent = 'Speaking...';
-            loadingMessage.classList.add('bot-message');
-            chatHistory.appendChild(loadingMessage);
-
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${GEMINI_API_KEY}`;
             
             const payload = {
@@ -425,7 +426,7 @@
                     responseModalities: ["AUDIO"],
                     speechConfig: {
                         voiceConfig: {
-                            prebuiltVoiceConfig: { voiceName: "Orus" } // A firm and clear voice
+                            prebuiltVoiceConfig: { voiceName: "Leda" } // A beautiful female voice
                         }
                     }
                 },
@@ -456,6 +457,7 @@
                     const audioUrl = URL.createObjectURL(wavBlob);
                     
                     const audio = new Audio(audioUrl);
+                    currentAudio = audio;
                     audio.play();
 
                 } else {
@@ -463,9 +465,6 @@
                 }
             } catch (error) {
                 console.error('Error with TTS:', error);
-                // No need to save to Firestore since it's a temporary message
-            } finally {
-                loadingMessage.remove();
             }
         }
 
